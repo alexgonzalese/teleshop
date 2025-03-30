@@ -1,0 +1,5 @@
+.custom-card{
+    background-color: var(--base-100); /* Reemplaza con el valor real */
+  box-shadow: var(--shadow-sm); /* Reemplaza con el valor real */
+  animation: fadeIn 0.5s ease-in-out;
+}

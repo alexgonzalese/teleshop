@@ -1,0 +1,10 @@
+<div class="join flex justify-center items-center mt-4 mb-10">
+  @for (pages of getPagesList(); track $index) {
+  <button class="join-item btn"
+  [class.btn-primary]="pages === activePage()"
+  [routerLink]="[]"
+  [queryParams]="{ page: pages }"
+  (click)="activePage.set(pages)"
+  >{{pages}}</button>
+  }
+</div>
