@@ -13,18 +13,14 @@ const BASEURL = environment.baseUrl;
 export class AuthService {
   private _authStatus = signal<AuthStatus>('checking');
   private _user = signal<User | null>(null);
-  private _token = signal<string | null>(null);
+  private _token = signal<string | null>(localStorage.getItem('token'));
 
   private http = inject(HttpClient);
 
   checkStatusResource = rxResource({
-    loader: () => this.test(),
+    loader: () => this.checkStatus(),
   });
 
-  test() {
-    console.log('test.....');
-    return of(true);
-  }
 
   authStatus = computed<AuthStatus>(() => {
     if (this._authStatus() === 'checking') return 'checking';
@@ -59,9 +55,9 @@ export class AuthService {
 
     return this.http
       .get<AuthResponse>(`${BASEURL}/auth/check-status`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       })
       .pipe(
         tap((resp) => this.handleAuthSuccess(resp)),
@@ -76,7 +72,7 @@ export class AuthService {
     this._user.set(null);
     this._token.set(null);
 
-    localStorage.removeItem('token');
+     localStorage.removeItem('token');
   }
 
   private handleAuthSuccess(resp: AuthResponse) {
@@ -90,8 +86,10 @@ export class AuthService {
 
   private handleAuthError(error: any) {
     this.logout();
+    console.error('Error en la autenticación', error);
     return of(false);
   }
+  //todo: crear formulario para crear usuario
 
   // Codigo sin refactorizar
   // login(email: string, password: string): Observable<boolean> {
